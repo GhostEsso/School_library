@@ -6,7 +6,7 @@ class Person
   attr_reader :id
 
   # The constructor of the Person class with default parameters.
-  def initialize(name = "Unknown", age = 0, parent_permission = true)
+  def initialize(name: 'Unknown', age: 0, parent_permission: true)
     # Generation of a random identifier.
     @id = generate_id
 
