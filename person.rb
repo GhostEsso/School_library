@@ -1,34 +1,34 @@
 class Person
-    # Utilisation de attr_accessor pour créer les méthodes de lecture et d'écriture pour :name et :age.
+    # Using attr_accessor to create the read and write methods for :name and :age.
     attr_accessor :name, :age
   
-    # Utilisation de attr_reader pour créer la méthode de lecture pour :id.
+    # Using attr_reader to create the read method for :id.
     attr_reader :id
-  
-    # Le constructeur de la classe Person avec des paramètres par défaut.
+
+    # The constructor of the Person class with default parameters.
     def initialize(name = "Unknown", age = 0, parent_permission = true)
-      # Génération d'un identifiant aléatoire.
+        # Generation of a random identifier.
       @id = generate_id
-  
-      # Assignation des valeurs passées en paramètre aux variables d'instance.
+
+        # Assignment of values ​​passed as parameters to instance variables.
       @name = name
       @age = age
       @parent_permission = parent_permission
     end
   
-    # Méthode pour déterminer si la personne peut utiliser les services (basée sur l'âge et la permission parentale).
+    # Method to determine if the person can use the services (based on age and parental permission).
     def can_use_services?
       of_age? || @parent_permission
     end
   
     private
   
-    # Méthode pour vérifier si la personne est majeure.
+    # Method to check if the person is an adult.
     def of_age?
       @age >= 18
     end
   
-    # Méthode pour générer un identifiant aléatoire.
+    # Method to generate a random identifier.
     def generate_id
       rand(1..1000)
     end
