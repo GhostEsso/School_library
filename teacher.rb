@@ -1,5 +1,5 @@
 class Teacher < Person
-  def initialize(name: 'Unknown', age: 0, specialization:)
+  def initialize(specialization:, name: 'Unknown', age: 0)
     super(id, name, age, parent_permission: true)
     @specialization = specialization
   end
