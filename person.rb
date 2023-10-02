@@ -6,9 +6,9 @@ class Person
   attr_reader :id
 
   # The constructor of the Person class with default parameters.
-  def initialize(name: 'Unknown', age: 0, parent_permission: true)
+  def initialize(id, age, name: 'Unknown', parent_permission: true)
     # Generation of a random identifier.
-    @id = generate_id
+    @id = id
 
     # Assignment of values ​​passed as parameters to instance variables.
     @name = name
@@ -27,9 +27,7 @@ class Person
   def of_age?
     @age >= 18
   end
-
-  # Method to generate a random identifier.
-  def generate_id
-    rand(1..1000)
-  end
 end
+
+n1 = Person.new(1, 25, name: 'Philippe')
+puts n1.can_use_services?
