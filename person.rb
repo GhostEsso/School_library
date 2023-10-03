@@ -20,7 +20,6 @@ class Person < Nameable
   private
 
   def of_age?
-
     @age >= 18
   end
 
@@ -31,4 +30,4 @@ class Person < Nameable
   end
 end
 
-person = Person.new(22, 'maximilianus')
+Person.new(22, 'maximilianus')
