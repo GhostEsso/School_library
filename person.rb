@@ -24,8 +24,6 @@ class Person < Nameable
     @age >= 18 || @parent_permission
   end
 
-  public
-
   # Method to check if the person is an adult.
   def of_age?
     @age >= 18
