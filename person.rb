@@ -1,4 +1,6 @@
-class Person
+require_relative 'Nameable'
+
+class Person < Nameable
   # Using attr_accessor to create the read and write methods for :name and :age.
   attr_accessor :name, :age
 
@@ -14,11 +16,12 @@ class Person
     @name = name
     @age = age
     @parent_permission = parent_permission
+    super()
   end
 
   # Method to determine if the person can use the services (based on age and parental permission).
   def can_use_services?
-    of_age? || @parent_permission
+    @age >= 18 || @parent_permission
   end
 
   private
@@ -27,7 +30,11 @@ class Person
   def of_age?
     @age >= 18
   end
+
+  def correct_name
+    @name
+  end
 end
 
-n1 = Person.new(1, 25, name: 'Philippe')
+n1 = Person.new(1, 25, 'Philippe')
 puts n1.can_use_services?
