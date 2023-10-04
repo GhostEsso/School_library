@@ -45,9 +45,9 @@
 <!-- Features -->
 
 ### Key Features <a name="key-features"></a>
-
-
-- **[registeration]**
+- Backend Management
+- Adaptability
+- Performance
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -97,7 +97,9 @@ In order to run this project you need:
 
 ## 🔭 Future Features <a name="future-features"></a>
 
-- [ ] **[Advance Features ]**
+- [ ] **[Basic UI ]**
+- [ ] **[Efficiency ]**
+- [ ] **[More Features ]**
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
