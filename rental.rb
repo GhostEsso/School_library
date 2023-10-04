@@ -7,8 +7,8 @@ class Rental
     @date = date
     @book = book
     @person = person
-    # << is to append elements to an array.
-    book.Rental << self
-    person.Rental << self
+
+    book.rentals << self
+    person.rentals << self
   end
 end
