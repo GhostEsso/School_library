@@ -93,6 +93,11 @@ In order to run this project you need:
 - Twitter: [@TambanaEssohana](https://twitter.com/TambanaEssohana)
 - LinkedIn: [Tambana Essohanam](https://www.linkedin.com/in/essohanam-tambana-62aa081a1/)
 
+👤 **Newton Ombese**
+
+- GitHub: [@newtonOmbese](https://github.com/mohammadnewton)
+- LinkedIn: [@newtonOmbese](https://www.linkedin.com/in/mohammad-newton-ombese/)
+
 <!-- FUTURE FEATURES -->
 
 ## 🔭 Future Features <a name="future-features"></a>
