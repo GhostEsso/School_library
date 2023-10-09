@@ -1,5 +1,5 @@
+require_relative 'options'
 require './app'
-require_relative './options.rb'
 
 def prompt
   puts 'Welcome to School Library App!'
