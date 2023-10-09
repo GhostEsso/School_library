@@ -87,7 +87,7 @@ In order to run this project you need:
 
 ## 👥 Authors <a name="authors"></a>
 
-👤 **Essohanam TAMBANA**
+👤 **Essohanam  TAMBANA**
 
 - GitHub: [@GhostEsso](https://github.com/GhostEsso)
 - Twitter: [@TambanaEssohana](https://twitter.com/TambanaEssohana)
