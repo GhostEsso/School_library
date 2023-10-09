@@ -34,99 +34,130 @@ class App
 
   def create_person
     print 'Do you want to create a student (1) or a teacher (2)? [Input the number]: '
-    student_or_teacher = gets.chomp.to_i
-    if student_or_teacher == 1
+    choice = gets.chomp.to_i
+
+    case choice
+    when 1
       create_student
-    elsif student_or_teacher == 2
+    when 2
       create_teacher
     else
-      puts "Error: option has an invalid value (#{student_or_teacher})"
+      puts "Error: Invalid choice (#{choice})"
     end
   end
 
   def create_student
-    print 'Age: '
-    age = gets.chomp.to_i
-
-    print 'Name: '
-    name = gets.chomp.to_s
-
-    print 'Has parent permission? [Y/N]: '
-    parent_permission = gets.chomp.to_s
-
-    if parent_permission =~ /^[Yy]/
-      student = Student.new('Unknown', age, name, parent_permission: true)
-    elsif parent_permission =~ /^[Nn]/
-      student = Student.new('Unknown', age, name, parent_permission: false)
-    else
-      puts "Error: option has an invalid value (#{parent_permission})"
-      return
-    end
-
-    @people.push(student)
-    puts 'Person created successfully'
+    student = input_student_details
+    @people.push(student) if student
   end
 
   def create_teacher
-    print 'Age: '
-    age = gets.chomp.to_i
-
-    print 'Name: '
-    name = gets.chomp.to_s
-
-    print 'Specialization: '
-    specialization = gets.chomp.to_s
-
-    teacher = Teacher.new(specialization, age, name)
-    @people.push(teacher)
-    puts 'Person created successfully'
+    teacher = input_teacher_details
+    @people.push(teacher) if teacher
   end
 
   def create_book
-    print 'Title: '
-    title = gets.chomp.to_s
-
-    print 'Author: '
-    author = gets.chomp.to_s
-
-    @books.push(Book.new(title, author))
-    puts 'Book created successfully'
+    book = input_book_details
+    @books.push(book) if book
   end
 
   def create_rental
-    puts 'Select a book from the following list by number'
-    list_books_with_index
-    book_index = gets.chomp.to_i
-    unless (0...@books.length).include?(book_index)
-      puts "Can not add a record. Book #{book_index} doesn't exist"
-      return
-    end
-    book = @books[book_index]
-    puts "\nSelect a person from the following list by number (not id)"
-    list_people_with_index
-    person_index = gets.chomp.to_i
-    unless (0...@people.length).include?(person_index)
-      puts "Can not add a record. Person #{person_index} doesn't exist"
-      return
-    end
-    person = @people[person_index]
-    print 'Date: '
-    date = gets.chomp.to_s
-    @rentals.push(Rental.new(date, book, person))
-    puts 'Rental created successfully'
+    rental = input_rental_details
+    @rentals.push(rental) if rental
   end
 
   def list_rentals
     print 'ID of person: '
     id = gets.chomp.to_i
-    selected = @rentals.find_all { |rental| rental.person.id == id }
-    if selected.nil?
+    selected_rentals = @rentals.select { |rental| rental.person.id == id }
+
+    if selected_rentals.empty?
       puts "Person with id=#{id} doesn't exist"
-      return
+    else
+      puts 'Rentals:'
+      selected_rentals.each do |rental|
+        puts "Date: #{rental.date}, Book \"#{rental.book.title}\" by #{rental.book.author}"
+      end
     end
-    puts 'Rentals:'
-    selected.map { |rental| puts "Date: #{rental.date}, Book \"#{rental.book.title}\" by #{rental.book.author}" }
   end
+
+  private
+
+  def input_student_details
+    print 'Age: '
+    age = gets.chomp.to_i
+    print 'Name: '
+    name = gets.chomp.to_s
+    print 'Has parent permission? [Y/N]: '
+    parent_permission = gets.chomp.strip.downcase
+
+    if %w[yes y].include?(parent_permission)
+      Student.new('Unknown', age, name, parent_permission: true)
+    elsif %w[no n].include?(parent_permission)
+      Student.new('Unknown', age, name, parent_permission: false)
+    else
+      puts "Error: Invalid parent permission value (#{parent_permission})"
+      nil
+    end
+  end
+
+  def input_teacher_details
+    print 'Age: '
+    age = gets.chomp.to_i
+    print 'Name: '
+    name = gets.chomp.to_s
+    print 'Specialization: '
+    specialization = gets.chomp.to_s
+    Teacher.new(specialization, age, name)
+  end
+
+  def input_book_details
+    print 'Title: '
+    title = gets.chomp.to_s
+    print 'Author: '
+    author = gets.chomp.to_s
+    Book.new(title, author)
+  end
+
+  def input_rental_details
+    book_index = select_book_index
+
+    if book_index.nil?
+      puts "Can not add a record. Book #{book_index} doesn't exist"
+      return nil
+    end
+
+    person_index = select_person_index
+
+    if person_index.nil?
+      puts "Can not add a record. Person #{person_index} doesn't exist"
+      return nil
+    end
+
+    print 'Date: '
+    date = gets.chomp.to_s
+    book = @books[book_index]
+    person = @people[person_index]
+    Rental.new(date, book, person)
+  end
+
+  def select_book_index
+    puts 'Select a book from the following list by number'
+    list_books_with_index
+    book_index = gets.chomp.to_i
+
+    (0...@books.length).include?(book_index) ? book_index : nil
+  end
+
+  def select_person_index
+    puts "\nSelect a person from the following list by number (not id)"
+    list_people_with_index
+    person_index = gets.chomp.to_i
+
+    (0...@people.length).include?(person_index) ? person_index : nil
+  end
+
+  public
 
   def run
     prompt
