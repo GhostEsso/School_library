@@ -11,4 +11,9 @@ def prompt
     call_option(option)
   end
 end
-main
+
+# Appelle la méthode run de la classe App
+App.new.run if __FILE__ == $PROGRAM_NAME
+
+# Appelle la méthode prompt pour démarrer l'application
+prompt
