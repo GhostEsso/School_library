@@ -11,4 +11,7 @@ def prompt
     call_option(option)
   end
 end
-main
+
+App.new.run if __FILE__ == $PROGRAM_NAME
+
+prompt
