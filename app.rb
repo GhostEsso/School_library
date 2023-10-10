@@ -157,8 +157,33 @@ class App
     (0...@people.length).include?(person_index) ? person_index : nil
   end
 
-  public
+  # data repo where we'll store nos json files
+  def save_data
+    save_to_json('books', @books)
+    save_to_json('people', @people)
+    save_to_json('rentals', @rentals)
+  end
 
+  def save_to_json(filename, data)
+    File.open("data/#{filename}.json", 'w') do |file|
+      file.puts JSON.generate(data)
+    end
+  end
+
+  # Loading data from Json files
+  def load_data
+    @books = load_from_json('books')
+    @people = load_from_json('people')
+    @rentals = load_from_json('rentals')
+  end
+
+  def load_from_json(filename)
+    return [] unless File.exist?("data/#{filename}.json")
+
+    JSON.parse(File.read("data/#{filename}.json"))
+  end
+
+  public
   def run
     prompt
   end
