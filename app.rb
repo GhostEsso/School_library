@@ -1,3 +1,4 @@
+require 'json'
 require './student'
 require './teacher'
 require './book'
