@@ -1,10 +1,12 @@
-require 'json'
+require './json_helper'
 require './student'
 require './teacher'
 require './book'
 require './rental'
 
 class App
+  include JsonHelper
+
   attr_accessor :books, :people, :rentals
 
   def initialize
@@ -165,26 +167,15 @@ class App
     save_to_json('rentals', @rentals)
   end
 
-  def save_to_json(filename, data)
-    File.open("data/#{filename}.json", 'w') do |file|
-      file.puts JSON.generate(data)
-    end
-  end
-
-  # Loading data from Json files
+  # Load data from JSON files
   def load_data
     @books = load_from_json('books')
     @people = load_from_json('people')
     @rentals = load_from_json('rentals')
   end
 
-  def load_from_json(filename)
-    return [] unless File.exist?("data/#{filename}.json")
-
-    JSON.parse(File.read("data/#{filename}.json"))
-  end
-
   public
+
   def run
     prompt
   end
