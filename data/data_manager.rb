@@ -18,14 +18,12 @@ class DataManager
 
   # Save Data
   def save_data
-    begin
-      save_books
-      save_rentals
-      save_people
-      puts 'Data saved!'
-    rescue StandardError => e
-      puts "Error Saving Data: #{e.message}"
-    end
+    save_books
+    save_rentals
+    save_people
+    puts 'Data saved!'
+  rescue StandardError => e
+    puts "Error Saving Data: #{e.message}"
   end
 
   private
@@ -85,8 +83,6 @@ class DataManager
     save_people
   end
 
-  private
-
   def save_people
     File.open('./data/people.json', 'w') do |file|
       people_data = @people.map do |person|
@@ -99,23 +95,23 @@ class DataManager
       end
       file.puts JSON.pretty_generate(people_data)
     end
-  end  
+  end
 
-def load_people
-  return unless File.exist?('./data/people.json')
+  def load_people
+    return unless File.exist?('./data/people.json')
 
-  json_str = File.read('./data/people.json')
-  people_data = JSON.parse(json_str)
+    json_str = File.read('./data/people.json')
+    people_data = JSON.parse(json_str)
 
-  @people = people_data.map do |data|
-    age = data['age'].is_a?(String) ? data['age'] : data['age'].to_i
-    if data['type'] == 'Student'
-      Student.new('Unknown', age, data['name'], parent_permission: false)
-    elsif data['type'] == 'Teacher'
-      Teacher.new('Unknown', age, data['name'])
-    else
-      puts "Unknown person type: #{data['type']}"
+    @people = people_data.map do |data|
+      age = data['age'].is_a?(String) ? data['age'] : data['age'].to_i
+      if data['type'] == 'Student'
+        Student.new('Unknown', age, data['name'], parent_permission: false)
+      elsif data['type'] == 'Teacher'
+        Teacher.new('Unknown', age, data['name'])
+      else
+        puts "Unknown person type: #{data['type']}"
+      end
     end
   end
-end
 end

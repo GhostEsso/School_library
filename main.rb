@@ -1,5 +1,5 @@
 require_relative 'options'
-require './app'
+require_relative 'app' # Assuming app.rb is in the same directory
 
 def prompt
   puts 'Welcome to School Library App!'
@@ -13,28 +13,26 @@ def prompt
 end
 
 def call_option(option)
-  case option
-  when 1
-    list_books
-  when 2
-    list_people
-  when 3
-    create_person
-  when 4
-    create_book
-  when 5
-    create_rental
-  when 6
-    list_rentals
-  when 7
-    save_data
+  options = {
+    1 => -> { list_books },
+    2 => -> { list_people },
+    3 => -> { create_person },
+    4 => -> { create_book },
+    5 => -> { create_rental },
+    6 => -> { list_rentals },
+    7 => -> { save_data }
+  }
+
+  action = options[option]
+  if action
+    action.call
   else
     puts 'Invalid option. Please try again.'
   end
 end
 
-# Appelle la méthode run de la classe App
+# Initialize and run the app if this file is run directly
 @app = App.new.run if __FILE__ == $PROGRAM_NAME
 
-# Appelle la méthode prompt pour démarrer l'application
+# Prompt for user input
 prompt

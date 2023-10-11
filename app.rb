@@ -3,7 +3,7 @@ require './student'
 require './teacher'
 require './book'
 require './rental'
-require_relative './data/data_manager'
+require_relative 'data/data_manager'
 
 class App
   include JsonHelper
@@ -20,21 +20,21 @@ class App
     load_data
   end
 
-    # load Data
-    def load_data
-      @data_manager.load_data
-      @books = @data_manager.books
-      @people = @data_manager.people
-      @rentals = @data_manager.rentals
-    end
+  # load Data
+  def load_data
+    @data_manager.load_data
+    @books = @data_manager.books
+    @people = @data_manager.people
+    @rentals = @data_manager.rentals
+  end
 
-    # save data
-    def save_data
-      @data_manager.save_books
-      @data_manager.save_rentals
-      @data_manager.save_people
-      puts 'Data saved!'
-    end
+  # save data
+  def save_data
+    @data_manager.save_books
+    @data_manager.save_rentals
+    @data_manager.save_people
+    puts 'Data saved!'
+  end
 
   def list_books
     @books.each { |book| puts "Title: \"#{book.title}\", Author: #{book.author}" }
@@ -73,27 +73,26 @@ class App
   def create_student
     student = input_student_details
     @data_manager.people.push(student) if student
-    @data_manager.save_data  # Sauvegarde après l'ajout de l'étudiant
+    @data_manager.save_data # Sauvegarde après l'ajout de l'étudiant
   end
-  
+
   def create_teacher
     teacher = input_teacher_details
     @data_manager.people.push(teacher) if teacher
-    @data_manager.save_data  # Sauvegarde après l'ajout de l'enseignant
+    @data_manager.save_data # Sauvegarde après l'ajout de l'enseignant
   end
-  
+
   def create_book
     book = input_book_details
     @data_manager.books.push(book) if book
-    @data_manager.save_data  # Sauvegarde après l'ajout du livre
+    @data_manager.save_data # Sauvegarde après l'ajout du livre
   end
-  
+
   def create_rental
     rental = input_rental_details
     @data_manager.rentals.push(rental) if rental
-    @data_manager.save_data  # Sauvegarde après l'ajout de la location
+    @data_manager.save_data # Sauvegarde après l'ajout de la location
   end
-  
 
   def list_rentals
     print 'ID of person: '
