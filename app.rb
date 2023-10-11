@@ -1,3 +1,4 @@
+require './json_helper'
 require './student'
 require './teacher'
 require './book'
@@ -5,6 +6,8 @@ require './rental'
 require_relative './data/data_manager'
 
 class App
+  include JsonHelper
+
   attr_accessor :books, :people, :rentals
 
   def initialize
