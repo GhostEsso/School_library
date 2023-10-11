@@ -36,10 +36,22 @@ class Person < Nameable
     @age >= 18
   end
 
+  def generate_id
+    Time.now.to_i
+  end
+
   public
 
   def can_use_services?
     of_age? || @parent_permission
+  end
+
+  def to_hash
+    {
+      'type' => self.class.name,
+      'age' => @age,
+      'name' => @name
+    }
   end
 end
 

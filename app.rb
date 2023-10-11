@@ -2,6 +2,7 @@ require './student'
 require './teacher'
 require './book'
 require './rental'
+require_relative './data/data_manager'
 
 class App
   attr_accessor :books, :people, :rentals
@@ -10,7 +11,27 @@ class App
     @books = []
     @rentals = []
     @people = []
+    # define Data manager here
+    @data_manager = DataManager.new
+    # load data used here as Callback func
+    load_data
   end
+
+    # load Data
+    def load_data
+      @data_manager.load_data
+      @books = @data_manager.books
+      @people = @data_manager.people
+      @rentals = @data_manager.rentals
+    end
+
+    # save data
+    def save_data
+      @data_manager.save_books
+      @data_manager.save_rentals
+      @data_manager.save_people
+      puts 'Data saved!'
+    end
 
   def list_books
     @books.each { |book| puts "Title: \"#{book.title}\", Author: #{book.author}" }
@@ -48,23 +69,28 @@ class App
 
   def create_student
     student = input_student_details
-    @people.push(student) if student
+    @data_manager.people.push(student) if student
+    @data_manager.save_data  # Sauvegarde après l'ajout de l'étudiant
   end
-
+  
   def create_teacher
     teacher = input_teacher_details
-    @people.push(teacher) if teacher
+    @data_manager.people.push(teacher) if teacher
+    @data_manager.save_data  # Sauvegarde après l'ajout de l'enseignant
   end
-
+  
   def create_book
     book = input_book_details
-    @books.push(book) if book
+    @data_manager.books.push(book) if book
+    @data_manager.save_data  # Sauvegarde après l'ajout du livre
   end
-
+  
   def create_rental
     rental = input_rental_details
-    @rentals.push(rental) if rental
+    @data_manager.rentals.push(rental) if rental
+    @data_manager.save_data  # Sauvegarde après l'ajout de la location
   end
+  
 
   def list_rentals
     print 'ID of person: '
@@ -157,34 +183,10 @@ class App
     (0...@people.length).include?(person_index) ? person_index : nil
   end
 
-  # data repo where we'll store nos json files
-  def save_data
-    save_to_json('books', @books)
-    save_to_json('people', @people)
-    save_to_json('rentals', @rentals)
-  end
-
-  def save_to_json(filename, data)
-    File.open("data/#{filename}.json", 'w') do |file|
-      file.puts JSON.generate(data)
-    end
-  end
-
-  # Loading data from Json files
-  def load_data
-    @books = load_from_json('books')
-    @people = load_from_json('people')
-    @rentals = load_from_json('rentals')
-  end
-
-  def load_from_json(filename)
-    return [] unless File.exist?("data/#{filename}.json")
-
-    JSON.parse(File.read("data/#{filename}.json"))
-  end
-
   public
+
   def run
+    load_data
     prompt
   end
 end

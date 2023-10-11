@@ -1,0 +1,121 @@
+require 'json'
+
+class DataManager
+  attr_accessor :books, :rentals, :people
+
+  def initialize
+    @books = []
+    @rentals = []
+    @people = []
+  end
+
+  # Load Data
+  def load_data
+    load_books
+    load_rentals
+    load_people
+  end
+
+  # Save Data
+  def save_data
+    begin
+      save_books
+      save_rentals
+      save_people
+      puts 'Data saved!'
+    rescue StandardError => e
+      puts "Error Saving Data: #{e.message}"
+    end
+  end
+
+  private
+
+  def save_books
+    # Use File.open with a block to automatically close the file after writing
+    File.open('./data/books.json', 'w') do |file|
+      book_data = @books.map { |book| { 'title' => book.title, 'author' => book.author } }
+      file.puts JSON.generate(book_data)
+    end
+  end
+
+  def load_books
+    return unless File.exist?('./data/books.json')
+
+    json_str = File.read('./data/books.json')
+    book_data = JSON.parse(json_str)
+
+    @books = book_data.map do |data|
+      Book.new(data['title'], data['author'])
+    end
+  end
+
+  def save_rentals
+    rentals_data = @rentals.map do |rental|
+      {
+        'date' => rental.date,
+        'book' => { 'title' => rental.book.title, 'author' => rental.book.author },
+        'person' => { 'type' => rental.person.class.name, 'age' => rental.person.age, 'name' => rental.person.name }
+      }
+    end
+
+    File.open('./data/rentals.json', 'w') do |file|
+      file.puts JSON.generate(rentals_data)
+    end
+  end
+
+  def load_rentals
+    return unless File.exist?('./data/rentals.json')
+
+    json_str = File.read('./data/rentals.json')
+    rentals_data = JSON.parse(json_str)
+
+    @rentals = rentals_data.map do |data|
+      book_data = data['book']
+      person_data = data['person']
+      book = Book.new(book_data['title'], book_data['author'])
+      person_class = Object.const_get(person_data['type'])
+      person = person_class.new(person_data['age'], person_data['name'])
+      Rental.new(data['date'], book, person)
+    end
+  end
+
+  def create_person(type, age, name)
+    person = Object.const_get(type).new(age, name)
+    @people.push(person)
+    save_people
+  end
+
+  private
+
+  def save_people
+    File.open('./data/people.json', 'w') do |file|
+      people_data = @people.map do |person|
+        {
+          'id' => person.id,
+          'type' => person.class.name,
+          'age' => person.age,
+          'name' => person.name
+        }
+      end
+      file.puts JSON.pretty_generate(people_data)
+    end
+  end  
+
+def load_people
+  return unless File.exist?('./data/people.json')
+
+  json_str = File.read('./data/people.json')
+  people_data = JSON.parse(json_str)
+
+  @people = people_data.map do |data|
+    age = data['age'].is_a?(String) ? data['age'] : data['age'].to_i
+    if data['type'] == 'Student'
+      Student.new('Unknown', age, data['name'], parent_permission: false)
+    elsif data['type'] == 'Teacher'
+      Teacher.new('Unknown', age, data['name'])
+    else
+      puts "Unknown person type: #{data['type']}"
+    end
+  end
+end
+end

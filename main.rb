@@ -12,6 +12,29 @@ def prompt
   end
 end
 
-App.new.run if __FILE__ == $PROGRAM_NAME
+def call_option(option)
+  case option
+  when 1
+    list_books
+  when 2
+    list_people
+  when 3
+    create_person
+  when 4
+    create_book
+  when 5
+    create_rental
+  when 6
+    list_rentals
+  when 7
+    save_data
+  else
+    puts 'Invalid option. Please try again.'
+  end
+end
 
+# Appelle la méthode run de la classe App
+@app = App.new.run if __FILE__ == $PROGRAM_NAME
+
+# Appelle la méthode prompt pour démarrer l'application
 prompt
