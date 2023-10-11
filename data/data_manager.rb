@@ -91,7 +91,7 @@ class DataManager
       existing_people = JSON.parse(json_str)
       existing_people = [] unless existing_people.is_a?(Array) # Ensure it's an array
     end
-  
+
     # Append the new person
     @people.each do |person|
       existing_people << if person.is_a?(Student)
@@ -102,12 +102,12 @@ class DataManager
                              parent_permission: person.parent_permission, specialization: person.specialization }
                          end
     end
-  
+
     # Save the updated data
     File.open('./data/people.json', 'w') do |file|
       file.puts JSON.pretty_generate(existing_people)
     end
-  end  
+  end
 
   def load_people
     return unless File.exist?('classes/people.json')
