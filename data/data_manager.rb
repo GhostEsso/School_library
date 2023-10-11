@@ -84,34 +84,43 @@ class DataManager
   end
 
   def save_people
-    File.open('./data/people.json', 'w') do |file|
-      people_data = @people.map do |person|
-        {
-          'id' => person.id,
-          'type' => person.class.name,
-          'age' => person.age,
-          'name' => person.name
-        }
-      end
-      file.puts JSON.pretty_generate(people_data)
+    # Load existing people data
+    existing_people = []
+    if File.exist?('./data/people.json')
+      json_str = File.read('./data/people.json')
+      existing_people = JSON.parse(json_str)
+      existing_people = [] unless existing_people.is_a?(Array) # Ensure it's an array
     end
-  end
+  
+    # Append the new person
+    @people.each do |person|
+      existing_people << if person.is_a?(Student)
+                           { type: 'Student', id: person.id, name: person.name, age: person.age,
+                             parent_permission: person.parent_permission }
+                         else
+                           { type: 'Teacher', id: person.id, name: person.name, age: person.age,
+                             parent_permission: person.parent_permission, specialization: person.specialization }
+                         end
+    end
+  
+    # Save the updated data
+    File.open('./data/people.json', 'w') do |file|
+      file.puts JSON.pretty_generate(existing_people)
+    end
+  end  
 
   def load_people
-    return unless File.exist?('./data/people.json')
+    return unless File.exist?('classes/people.json')
 
-    json_str = File.read('./data/people.json')
-    people_data = JSON.parse(json_str)
-
-    @people = people_data.map do |data|
-      age = data['age'].is_a?(String) ? data['age'] : data['age'].to_i
-      if data['type'] == 'Student'
-        Student.new('Unknown', age, data['name'], parent_permission: false)
-      elsif data['type'] == 'Teacher'
-        Teacher.new('Unknown', age, data['name'])
-      else
-        puts "Unknown person type: #{data['type']}"
-      end
+    @people = []
+    File.foreach('classes/people.json') do |line|
+      element = JSON.parse(line)
+      new_person = if element['type'] == 'Student'
+                     Student.new(element['id'], element['name'], element['age'], element['parent_permission'])
+                   else
+                     Teacher.new(element['id'], element['name'], element['age'], element['specialization'])
+                   end
+      @people.push(new_person)
     end
   end
 end
