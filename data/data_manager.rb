@@ -87,18 +87,18 @@ class DataManager
     File.open('data/people.json', 'w') do |file|
       people_data = @people.map do |person|
         if person.is_a?(Student)
-          { "type" => "Student", "id" => person.id, "name" => person.name, "age" => person.age,
-            "parent_permission" => person.parent_permission }
+          { "type" => "Student", "id" => person.id, "name" => person.name, "age" => person.age, "parent_permission" => person.parent_permission }
+        elsif person.is_a?(Teacher)
+          { "type" => "Teacher", "id" => person.id, "name" => person.name, "age" => person.age, "specialization" => person.specialization }
         else
-          { "type" => "Teacher", "id" => person.id, "name" => person.name, "age" => person.age,
-            "specialization" => person.specialization }
+          # Handle other types if necessary
         end
       end
   
       file.puts JSON.generate(people_data)
     end
   end
-
+  
   def load_people
     return unless File.exist?('data/people.json')
   
@@ -114,11 +114,13 @@ class DataManager
     people_data.each do |data|
       if data['type'] == 'Student'
         parent_permission = data['parent_permission'] && data['parent_permission']['parent_permission']
-        person = Student.new(data['classroom'], data['age'].to_i, data['name'], parent_permission)
+        person = Student.new(data['id'].to_i, data['name'], data['age'].to_i, parent_permission)
+      elsif data['type'] == 'Teacher'
+        person = Teacher.new(data['specialization'], data['age'].to_i, data['name'])
       else
-        person = Teacher.new(data['name'], data['age'].to_i, data['specialization'], parent_permission)
+        # Handle other types if necessary
       end
       @people.push(person)
     end
-  end
+  end  
 end
