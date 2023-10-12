@@ -51,7 +51,7 @@ class App
       elsif person.is_a?(Teacher)
         puts "[#{person.class.name}] Name: \"#{person.name}\", ID: #{person.id}, Age: #{person.age}, Specialization: #{person.specialization}"
       else
-        puts "Unknown person type"
+        puts 'Unknown person type'
       end
     end
   end

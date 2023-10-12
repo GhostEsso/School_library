@@ -1,17 +1,22 @@
 require 'json'
+
 class DataManager
+
   attr_accessor :books, :rentals, :people
+
   def initialize
     @books = []
     @rentals = []
     @people = []
   end
+
   # Load Data
   def load_data
     load_books
     load_rentals
     load_people
   end
+
   # Save Data
   def save_data
     save_books
@@ -21,7 +26,9 @@ class DataManager
   rescue StandardError => e
     puts "Error Saving Data: #{e.message}"
   end
+
   private
+
   def save_books
     # Use File.open with a block to automatically close the file after writing
     File.open('./data/books.json', 'w') do |file|
@@ -29,6 +36,7 @@ class DataManager
       file.puts JSON.generate(book_data)
     end
   end
+
   def load_books
     return unless File.exist?('./data/books.json')
     json_str = File.read('./data/books.json')
@@ -37,6 +45,7 @@ class DataManager
       Book.new(data['title'], data['author'])
     end
   end
+
   def save_rentals
     rentals_data = @rentals.map do |rental|
       {
@@ -49,6 +58,7 @@ class DataManager
       file.puts JSON.generate(rentals_data)
     end
   end
+
   def load_rentals
     return unless File.exist?('./data/rentals.json')
     json_str = File.read('./data/rentals.json')
@@ -63,6 +73,7 @@ class DataManager
       Rental.new(data['date'], book, person)
     end
   end
+
   def save_people
     File.open('./data/people.json', 'w') do |file|
       people_data = @people.map do |person|
@@ -77,13 +88,14 @@ class DataManager
       file.puts JSON.generate(people_data)
     end
   end
+
   def load_people
     return unless File.exist?('./data/people.json')
     @people = []
     json_str = File.read('./data/people.json')
     begin
       people_data = JSON.parse(json_str)
-    rescue JSON::ParserError => e
+    rescue JSON::ParserError
       # Handle the JSON parsing error if necessary
       return
     end
