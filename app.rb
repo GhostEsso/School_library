@@ -7,7 +7,6 @@ require_relative 'data/data_manager'
 class App
   include JsonHelper
   attr_accessor :books, :people, :rentals
-
   def initialize
     @books = []
     @rentals = []
@@ -17,7 +16,6 @@ class App
     # load data used here as Callback func
     load_data
   end
-
   # load Data
   def load_data
     @data_manager.load_data
@@ -25,7 +23,6 @@ class App
     @people = @data_manager.people
     @rentals = @data_manager.rentals
   end
-
   # save data
   def save_data
     @data_manager.save_books
@@ -33,35 +30,28 @@ class App
     @data_manager.save_people
     puts 'Data saved!'
   end
-
   def list_books
     @books.each { |book| puts "Title: \"#{book.title}\", Author: #{book.author}" }
   end
-
   def list_books_with_index
     @books.each_with_index { |book, i| puts "#{i}) Title: \"#{book.title}\", Author: #{book.author}" }
   end
-
   def list_people
     @people.each do |person|
       if person.is_a?(Student)
-        puts "[#{person.class.name}] Name: \"#{person.name}\", ID: #{person.id},
-        Age: #{person.age}, Parent_Permission: #{person.parent_permission}"
+        puts "[#{person.class.name}] Name: \"#{person.name}\", ID: #{person.id}, Age: #{person.age}, Parent_Permission: #{person.parent_permission}"
       elsif person.is_a?(Teacher)
-        puts "[#{person.class.name}] Name: \"#{person.name}\", ID: #{person.id},
-        Age: #{person.age}, Specialization: #{person.specialization}"
+        puts "[#{person.class.name}] Name: \"#{person.name}\", ID: #{person.id}, Age: #{person.age}, Specialization: #{person.specialization}"
       else
-        puts 'Unknown person type'
+        puts "Unknown person type"
       end
     end
   end
-
   def list_people_with_index
     @people.each_with_index do |person, i|
       puts "#{i}) [#{person.class.name}] Name: \"#{person.name}\", ID: #{person.id}, Age: #{person.age}"
     end
   end
-
   def create_person
     print 'Do you want to create a student (1) or a teacher (2)? [Input the number]: '
     choice = gets.chomp.to_i
@@ -74,31 +64,26 @@ class App
       puts "Error: Invalid choice (#{choice})"
     end
   end
-
   def create_student
     student = input_student_details
     @data_manager.people.push(student) if student
     @data_manager.save_data # Sauvegarde après l'ajout de l'étudiant
   end
-
   def create_teacher
     teacher = input_teacher_details
     @data_manager.people.push(teacher) if teacher
     @data_manager.save_data # Sauvegarde après l'ajout de l'enseignant
   end
-
   def create_book
     book = input_book_details
     @data_manager.books.push(book) if book
     @data_manager.save_data # Sauvegarde après l'ajout du livre
   end
-
   def create_rental
     rental = input_rental_details
     @data_manager.rentals.push(rental) if rental
     @data_manager.save_data # Sauvegarde après l'ajout de la location
   end
-
   def list_rentals
     print 'ID of person: '
     id = gets.chomp.to_i
@@ -112,9 +97,7 @@ class App
       end
     end
   end
-
   private
-
   def input_student_details
     print 'Age: '
     age = gets.chomp.to_i
@@ -132,7 +115,6 @@ class App
       nil
     end
   end
-
   def input_teacher_details
     print 'Age: '
     age = gets.chomp.to_i
@@ -142,7 +124,6 @@ class App
     specialization = gets.chomp.to_s
     Teacher.new(specialization, age, name)
   end
-
   def input_book_details
     print 'Title: '
     title = gets.chomp.to_s
@@ -150,7 +131,6 @@ class App
     author = gets.chomp.to_s
     Book.new(title, author)
   end
-
   def input_rental_details
     book_index = select_book_index
     if book_index.nil?
@@ -168,23 +148,19 @@ class App
     person = @people[person_index]
     Rental.new(date, book, person)
   end
-
   def select_book_index
     puts 'Select a book from the following list by number'
     list_books_with_index
     book_index = gets.chomp.to_i
     (0...@books.length).include?(book_index) ? book_index : nil
   end
-
   def select_person_index
     puts "\nSelect a person from the following list by number (not id)"
     list_people_with_index
     person_index = gets.chomp.to_i
     (0...@people.length).include?(person_index) ? person_index : nil
   end
-
   public
-
   def run
     load_data
     prompt
