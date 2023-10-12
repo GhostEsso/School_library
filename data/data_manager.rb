@@ -82,7 +82,8 @@ class DataManager
           { 'type' => 'Student', 'id' => person.id, 'name' => person.name, 'age' => person.age,
             'parent_permission' => person.parent_permission }
         elsif person.is_a?(Teacher)
-          { 'type' => 'Teacher', 'id' => person.id, 'name' => person.name, 'age' => person.age, 'specialization' => person.specialization }
+          { 'type' => 'Teacher', 'id' => person.id, 'name' => person.name, 'age' => person.age,
+            'specialization' => person.specialization }
         end
       end
       file.puts JSON.generate(people_data)

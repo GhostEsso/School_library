@@ -46,13 +46,7 @@ class App
 
   def list_people
     @people.each do |person|
-      if person.is_a?(Student)
-        puts "[#{person.class.name}] Name: \"#{person.name}\", ID: #{person.id}, Age: #{person.age}, Parent_Permission: #{person.parent_permission}"
-      elsif person.is_a?(Teacher)
-        puts "[#{person.class.name}] Name: \"#{person.name}\", ID: #{person.id}, Age: #{person.age}, Specialization: #{person.specialization}"
-      else
-        puts 'Unknown person type'
-      end
+      puts "[#{person.class.name}] Name: \"#{person.name}\", ID: #{person.id}, Age: #{person.age}"
     end
   end
 
