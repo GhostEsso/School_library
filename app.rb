@@ -46,9 +46,16 @@ class App
 
   def list_people
     @people.each do |person|
-      puts "[#{person.class.name}] Name: \"#{person.name}\", ID: #{person.id}, Age: #{person.age}"
+      if person.is_a?(Student)
+        puts "[#{person.class.name}] Name: \"#{person.name}\", ID: #{person.id}, Age: #{person.age}, Parent_Permission: #{person.parent_permission}"
+      elsif person.is_a?(Teacher)
+        puts "[#{person.class.name}] Name: \"#{person.name}\", ID: #{person.id}, Age: #{person.age}, Specialization: #{person.specialization}"
+      else
+        puts "Unknown person type"
+      end
     end
   end
+  
 
   def list_people_with_index
     @people.each_with_index do |person, i|

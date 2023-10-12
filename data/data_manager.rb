@@ -116,7 +116,7 @@ class DataManager
         parent_permission = data['parent_permission'] && data['parent_permission']['parent_permission']
         person = Student.new(data['classroom'], data['age'].to_i, data['name'], parent_permission)
       else
-        person = Teacher.new(data['id'], data['name'], data['age'].to_i, data['specialization'])
+        person = Teacher.new(data['name'], data['age'].to_i, data['specialization'], parent_permission)
       end
       @people.push(person)
     end
