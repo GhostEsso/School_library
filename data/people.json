@@ -1,2 +1,1 @@
-{"type":"Teacher","id":3,"name":"fhh","age":124,"specialization":"h"}
-{"type":"Student","id":23,"name":"fhfhf","age":12,"parent_permission":{"parent_permission":false}}
+[{"type":"Student","id":13,"name":"fngn","age":12,"parent_permission":false},{"type":"Teacher","id":91,"name":23,"age":0,"specialization":51},{"type":"Student","id":11,"name":"gjdj","age":12,"parent_permission":false},{"type":"Teacher","id":54,"name":0,"age":13,"specialization":2},{"type":"Student","id":91,"name":"gg","age":24,"parent_permission":false},{"type":"Teacher","id":58,"name":0,"age":23,"specialization":10},{"type":"Teacher","id":49,"name":0,"age":45,"specialization":82},{"type":"Teacher","id":13,"name":"fjgg","age":35,"specialization":"djdd"}]

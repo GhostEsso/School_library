@@ -77,39 +77,48 @@ class DataManager
     end
   end
 
-  def create_person(type, age, name)
-    person = Object.const_get(type).new(age, name)
-    @people.push(person)
-    save_people
-  end
+  # def create_person(type, age, name)
+  #   person = Object.const_get(type).new(age, name)
+  #   @people.push(person)
+  #   save_people
+  # end
 
   def save_people
     File.open('data/people.json', 'w') do |file|
-      @people.each do |person|
-        json = if person.is_a?(Student)
-                 JSON.generate({ type: 'Student', id: person.id, name: person.name, age: person.age,
-                                 parent_permission: person.parent_permission })
-               else
-                 JSON.generate({ type: 'Teacher', id: person.id, name: person.name, age: person.age,
-                                 specialization: person.specialization })
-               end
-        file.puts(json)
+      people_data = @people.map do |person|
+        if person.is_a?(Student)
+          { "type" => "Student", "id" => person.id, "name" => person.name, "age" => person.age,
+            "parent_permission" => person.parent_permission }
+        else
+          { "type" => "Teacher", "id" => person.id, "name" => person.name, "age" => person.age,
+            "specialization" => person.specialization }
+        end
       end
+  
+      file.puts JSON.generate(people_data)
     end
   end
 
   def load_people
     return unless File.exist?('data/people.json')
-
+  
     @people = []
-    File.foreach('data/people.json') do |line|
-      element = JSON.parse(line)
-      new_person = if element['type'] == 'Student'
-                     Student.new(element['id'], element['name'], element['age'], element['parent_permission'])
-                   else
-                     Teacher.new(element['id'], element['name'], element['age'], element['specialization'])
-                   end
-      @people.push(new_person)
+    json_str = File.read('data/people.json')
+    begin
+      people_data = JSON.parse(json_str)
+    rescue JSON::ParserError => e
+      puts "Error parsing people.json: #{e.message}"
+      return
+    end
+  
+    people_data.each do |data|
+      if data['type'] == 'Student'
+        parent_permission = data['parent_permission'] && data['parent_permission']['parent_permission']
+        person = Student.new(data['classroom'], data['age'].to_i, data['name'], parent_permission)
+      else
+        person = Teacher.new(data['id'], data['name'], data['age'].to_i, data['specialization'])
+      end
+      @people.push(person)
     end
   end
 end
