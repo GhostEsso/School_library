@@ -69,7 +69,7 @@ class DataManager
       person_data = data['person']
       book = Book.new(book_data['title'], book_data['author'])
       person_class = Object.const_get(person_data['type'])
-      person = person_class.new(person_data['age'], person_data['name'])
+      person = person_class.new(person_data['age'], person_data['name'], person_data['parent_permission'])
       # Assuming 'date' is a valid key in your JSON data
       Rental.new(data['date'], book, person)
     end
@@ -79,7 +79,8 @@ class DataManager
     File.open('./data/people.json', 'w') do |file|
       people_data = @people.map do |person|
         if person.is_a?(Student)
-          { 'type' => 'Student', 'id' => person.id, 'name' => person.name, 'age' => person.age, 'parent_permission' => person.parent_permission }
+          { 'type' => 'Student', 'id' => person.id, 'name' => person.name, 'age' => person.age,
+            'parent_permission' => person.parent_permission }
         elsif person.is_a?(Teacher)
           { 'type' => 'Teacher', 'id' => person.id, 'name' => person.name, 'age' => person.age, 'specialization' => person.specialization }
         end

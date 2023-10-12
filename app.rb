@@ -78,7 +78,7 @@ class App
   def create_student
     student = input_student_details
     @data_manager.people.push(student) if student
-    @data_manager.save_data # Sauvegarde après l'ajout de l'étudiant
+    @data_manager.save_data
   end
 
   def create_teacher
@@ -122,11 +122,11 @@ class App
     name = gets.chomp.to_s
     print 'Has parent permission? [Y/N]: '
     parent_permission = gets.chomp.strip.downcase
-    # Correction ici : utiliser le bon paramètre pour la création de Student
+
     if %w[yes y].include?(parent_permission)
-      Student.new(age, name, true)
+      Student.new(age, name, true) # true for parent permission
     elsif %w[no n].include?(parent_permission)
-      Student.new(age, name, false)
+      Student.new(age, name, false) # false for no parent permission
     else
       puts "Error: Invalid parent permission value (#{parent_permission})"
       nil
