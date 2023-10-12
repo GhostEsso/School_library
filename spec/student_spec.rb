@@ -26,7 +26,7 @@ describe Student do
       expect(@student.classroom).to be_nil
     end
   end
-  
+
   describe '#play_hooky' do
     it 'returns a shrug emoticon' do
       expect(@student.play_hooky).to eql '¯\(ツ)/¯'
