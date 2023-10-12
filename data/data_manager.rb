@@ -1,7 +1,6 @@
 require 'json'
 
 class DataManager
-
   attr_accessor :books, :rentals, :people
 
   def initialize
@@ -39,6 +38,7 @@ class DataManager
 
   def load_books
     return unless File.exist?('./data/books.json')
+
     json_str = File.read('./data/books.json')
     book_data = JSON.parse(json_str)
     @books = book_data.map do |data|
@@ -61,6 +61,7 @@ class DataManager
 
   def load_rentals
     return unless File.exist?('./data/rentals.json')
+
     json_str = File.read('./data/rentals.json')
     rentals_data = JSON.parse(json_str)
     @rentals = rentals_data.map do |data|
@@ -78,11 +79,9 @@ class DataManager
     File.open('./data/people.json', 'w') do |file|
       people_data = @people.map do |person|
         if person.is_a?(Student)
-          { "type" => "Student", "id" => person.id, "name" => person.name, "age" => person.age, "parent_permission" => person.parent_permission }
+          { 'type' => 'Student', 'id' => person.id, 'name' => person.name, 'age' => person.age, 'parent_permission' => person.parent_permission }
         elsif person.is_a?(Teacher)
-          { "type" => "Teacher", "id" => person.id, "name" => person.name, "age" => person.age, "specialization" => person.specialization }
-        else
-          # Handle other types if necessary
+          { 'type' => 'Teacher', 'id' => person.id, 'name' => person.name, 'age' => person.age, 'specialization' => person.specialization }
         end
       end
       file.puts JSON.generate(people_data)
@@ -91,6 +90,7 @@ class DataManager
 
   def load_people
     return unless File.exist?('./data/people.json')
+
     @people = []
     json_str = File.read('./data/people.json')
     begin
@@ -101,12 +101,10 @@ class DataManager
     end
     people_data.each do |data|
       if data['type'] == 'Student'
-        parent_permission = data['parent_permission'] == "true"
+        parent_permission = data['parent_permission'] == 'true'
         person = Student.new(data['age'], data['name'], parent_permission)
       elsif data['type'] == 'Teacher'
         person = Teacher.new(data['specialization'], data['age'].to_i, data['name'])
-      else
-        # Handle other types if necessary
       end
       @people.push(person)
     end
