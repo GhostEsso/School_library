@@ -77,22 +77,24 @@ class DataManager
     end
   end
 
-  # def create_person(type, age, name)
-  #   person = Object.const_get(type).new(age, name)
-  #   @people.push(person)
-  #   save_people
-  # end
+  def create_person(type, age, name)
+    person = Object.const_get(type).new(age, name)
+    @people.push(person)
+    save_people
+  end
 
   def save_people
     File.open('data/people.json', 'w') do |file|
-      people_data = @people.map do |person|
-        if person.is_a?(Student)
-          { type: 'Student', id: person.id, name: person.name, age: person.age, parent_permission: person.parent_permission }
-        else
-          { type: 'Teacher', id: person.id, name: person.name, age: person.age, specialization: person.specialization }
-        end
+      @people.each do |person|
+        json = if person.is_a?(Student)
+                 JSON.generate({ type: 'Student', id: person.id, name: person.name, age: person.age,
+                                 parent_permission: person.parent_permission })
+               else
+                 JSON.generate({ type: 'Teacher', id: person.id, name: person.name, age: person.age,
+                                 specialization: person.specialization })
+               end
+        file.puts(json)
       end
-      file.puts JSON.generate(people_data)
     end
   end
 

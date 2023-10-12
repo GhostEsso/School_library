@@ -1,1 +1,2 @@
-[{"type":"Student","id":99,"name":"gh","age":12,"parent_permission":{"parent_permission":false}},{"type":"Student","id":94,"name":"fhs","age":43,"parent_permission":{"parent_permission":false}}]
+{"type":"Teacher","id":3,"name":"fhh","age":124,"specialization":"h"}
+{"type":"Student","id":23,"name":"fhfhf","age":12,"parent_permission":{"parent_permission":false}}
