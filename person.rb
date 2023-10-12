@@ -8,7 +8,7 @@ class Person < Nameable
 
   attr_reader :id, :classroom
 
-  def initialize(age, name = 'unknown', parent_permission: true)
+  def initialize(age, name, parent_permission: true)
     super()
     @id = Random.rand(1..100)
     @name = name
@@ -36,10 +36,22 @@ class Person < Nameable
     @age >= 18
   end
 
+  def generate_id
+    Time.now.to_i
+  end
+
   public
 
   def can_use_services?
     of_age? || @parent_permission
+  end
+
+  def to_hash
+    {
+      'type' => self.class.name,
+      'age' => @age,
+      'name' => @name
+    }
   end
 end
 

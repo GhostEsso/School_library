@@ -1,15 +1,39 @@
+require './json_helper'
 require './student'
 require './teacher'
 require './book'
 require './rental'
+require_relative 'data/data_manager'
 
 class App
+  include JsonHelper
+
   attr_accessor :books, :people, :rentals
 
   def initialize
     @books = []
     @rentals = []
     @people = []
+    # define Data manager here
+    @data_manager = DataManager.new
+    # load data used here as Callback func
+    load_data
+  end
+
+  # load Data
+  def load_data
+    @data_manager.load_data
+    @books = @data_manager.books
+    @people = @data_manager.people
+    @rentals = @data_manager.rentals
+  end
+
+  # save data
+  def save_data
+    @data_manager.save_books
+    @data_manager.save_rentals
+    @data_manager.save_people
+    puts 'Data saved!'
   end
 
   def list_books
@@ -35,7 +59,6 @@ class App
   def create_person
     print 'Do you want to create a student (1) or a teacher (2)? [Input the number]: '
     choice = gets.chomp.to_i
-
     case choice
     when 1
       create_student
@@ -48,29 +71,32 @@ class App
 
   def create_student
     student = input_student_details
-    @people.push(student) if student
+    @data_manager.people.push(student) if student
+    @data_manager.save_data
   end
 
   def create_teacher
     teacher = input_teacher_details
-    @people.push(teacher) if teacher
+    @data_manager.people.push(teacher) if teacher
+    @data_manager.save_data # Sauvegarde après l'ajout de l'enseignant
   end
 
   def create_book
     book = input_book_details
-    @books.push(book) if book
+    @data_manager.books.push(book) if book
+    @data_manager.save_data # Sauvegarde après l'ajout du livre
   end
 
   def create_rental
     rental = input_rental_details
-    @rentals.push(rental) if rental
+    @data_manager.rentals.push(rental) if rental
+    @data_manager.save_data # Sauvegarde après l'ajout de la location
   end
 
   def list_rentals
     print 'ID of person: '
     id = gets.chomp.to_i
     selected_rentals = @rentals.select { |rental| rental.person.id == id }
-
     if selected_rentals.empty?
       puts "Person with id=#{id} doesn't exist"
     else
@@ -92,9 +118,9 @@ class App
     parent_permission = gets.chomp.strip.downcase
 
     if %w[yes y].include?(parent_permission)
-      Student.new('Unknown', age, name, parent_permission: true)
+      Student.new(age, name, true) # true for parent permission
     elsif %w[no n].include?(parent_permission)
-      Student.new('Unknown', age, name, parent_permission: false)
+      Student.new(age, name, false) # false for no parent permission
     else
       puts "Error: Invalid parent permission value (#{parent_permission})"
       nil
@@ -121,19 +147,15 @@ class App
 
   def input_rental_details
     book_index = select_book_index
-
     if book_index.nil?
       puts "Can not add a record. Book #{book_index} doesn't exist"
       return nil
     end
-
     person_index = select_person_index
-
     if person_index.nil?
       puts "Can not add a record. Person #{person_index} doesn't exist"
       return nil
     end
-
     print 'Date: '
     date = gets.chomp.to_s
     book = @books[book_index]
@@ -145,7 +167,6 @@ class App
     puts 'Select a book from the following list by number'
     list_books_with_index
     book_index = gets.chomp.to_i
-
     (0...@books.length).include?(book_index) ? book_index : nil
   end
 
@@ -153,13 +174,13 @@ class App
     puts "\nSelect a person from the following list by number (not id)"
     list_people_with_index
     person_index = gets.chomp.to_i
-
     (0...@people.length).include?(person_index) ? person_index : nil
   end
 
   public
 
   def run
+    load_data
     prompt
   end
 end
