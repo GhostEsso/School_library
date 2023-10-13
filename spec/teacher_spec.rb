@@ -35,4 +35,10 @@ describe Teacher do
       expect(@teacher.name).to eql 'Severus Snape'
     end
   end
+
+  describe 'can_use_services?' do
+    it 'returns true for an adult' do
+      expect(@teacher.can_use_services?).to be_truthy
+    end
+  end
 end
