@@ -16,6 +16,24 @@ describe Person do
     end
   end
 
+  describe 'correct_name' do
+    it 'returns the correct name' do
+      expect(@person.correct_name).to eql 'Maximilianus'
+    end
+  end
+
+  describe 'classroom' do
+    it 'returns the correct classroom' do
+      expect(@person.classroom).to be_nil
+    end
+  end
+
+  describe 'add_new_rental' do
+    it 'adds a new rental' do
+      expect(@person.rental).to be_empty
+    end
+  end
+
   describe '#to_hash' do
     it 'returns a hash with person details' do
       hash = @person.to_hash
