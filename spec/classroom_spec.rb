@@ -21,4 +21,10 @@ describe Classroom do
       expect(@classroom.label).to eql 'Potions Classroom'
     end
   end
+
+  describe 'add_student' do
+    it 'adds a new student' do
+      expect(@classroom.classroom_students).to be_empty
+    end
+  end
 end
