@@ -26,6 +26,12 @@ describe Student do
       expect(@student.classroom).to be_nil
     end
   end
+
+  describe 'classroom' do
+    it 'returns the correct classroom' do
+      expect(@student.classroom).to eql nil
+    end
+  end
   
   describe '#play_hooky' do
     it 'returns a shrug emoticon' do
